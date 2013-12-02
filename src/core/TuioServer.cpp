@@ -20,6 +20,7 @@
 */
 
 #include "TuioServer.h"
+#include "ofMain.h"
 using namespace TUIO;
 
 #ifndef WIN32
@@ -31,11 +32,14 @@ static DWORD WINAPI ThreadFunc( LPVOID obj )
 	TuioServer *tuioServer = static_cast<TuioServer*>(obj);
 	while ((tuioServer->isConnected()) && (tuioServer->periodicMessagesEnabled())) {
 		tuioServer->sendFullMessages();
+    ofSleepMillis(MSEC_SECOND*tuioServer->getUpdateInterval());
+ /*
 #ifndef WIN32
-		usleep(USEC_SECOND*tuioServer->getUpdateInterval());
+		std::usleep(USEC_SECOND*tuioServer->getUpdateInterval());
 #else
 		Sleep(MSEC_SECOND*tuioServer->getUpdateInterval());
 #endif
+    */
 	}	
 	return 0;
 };
